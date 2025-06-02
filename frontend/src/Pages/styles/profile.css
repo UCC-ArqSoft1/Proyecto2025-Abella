@@ -1,0 +1,32 @@
+.myactivities-section {
+    top: 5vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.myactivities-container {
+    width: 70%;
+    height: 600px;
+    margin-left: 10px;
+    overflow-y: scroll;
+}
+
+.myactivity{
+    display: flex;
+    flex-direction: column;
+    height: 100px;
+}
+
+.myactivities-details {
+    display: flex;   
+}
+
+.myactivities-details p {
+    margin-right: 10px;
+}

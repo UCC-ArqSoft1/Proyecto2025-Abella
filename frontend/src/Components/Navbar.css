@@ -1,0 +1,79 @@
+@font-face {
+  font-family: spacexfont;
+  src: url('../Pages/styles/D-DIN-Bold.woff');
+}
+
+
+.navbar {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-container {
+  display: flex;
+  box-sizing: border-box;
+  position: relative;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+  height: 40px;
+  margin: auto;
+  padding: 2em;
+  -webkit-transition: opacity .2s linear .1s;
+  transition: opacity .2s linear .1s;
+  text-rendering: optimizelegibility;
+}
+
+.navbar-element {
+    margin: 10px;
+    text-decoration: none;
+    color: rgb(196, 196, 196);
+    font-size: large;
+    font-family: spacexfont;
+}
+
+.navbar-items {
+    text-decoration: none;
+    list-style: none;
+}
+
+
+a {
+    position: relative;
+}
+  
+a::before {
+      
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      border-radius: 2px;
+      background-color: rgb(196, 196, 196);
+      bottom: 0;
+      left: 0;
+      transform-origin: right;
+      transform: scaleX(0);
+      transition: transform .15s ease-in-out;
+    }
+  
+  a:hover::before {
+    transform-origin: left;
+    transform: scaleX(1);
+  }
+
+
+.hidden {
+  opacity: 0;
+}
+
+.activity-item{
+
+}
+
+.search-side-menu {
+  display: flex;
+  flex-direction: column;
+}
