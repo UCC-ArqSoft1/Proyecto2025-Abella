@@ -5,6 +5,7 @@ import './styles/activities.css';
 import HomeBg from '../assets/HomeBg.mp4'
 import search from '../assets/search.svg'
 import pool from '../assets/pool.jpg'
+import Horarios from "../Components/Inscription_hours";
 
 function Home() {
     const [selectedActivity,setselectedActivity] = useState(null)
@@ -47,33 +48,6 @@ function Home() {
         navigation(url)
     }
 
-    function Horarios(props) {
-
-        var close = false;
-        if (close == false) {
-        return (
-            <div onClick={()=> {setselectedActivity(null)}} className="Inscripcion-horarios">
-                <div className="inscription-container">
-                <h4>Horarios</h4>
-                    <div className="Horarios">
-                        {props.actividad.activity_hours != null ? props.actividad.activity_hours.map((hour) => {
-                        return (
-                            <div key={hour.id} className="hour">
-                                <p>{hour.day}</p>
-                                <p>{hour.hour_start}{hour.hour_start > 1100 && hour.hour_start <= 2300 ? "PM" : "AM"}</p>
-                                <p>{hour.hour_finish}{hour.hour_finish > 1100 && hour.hour_finish <= 2300 ? "PM" : "AM"}</p>
-                                <button>Inscribirse</button>
-                            </div>
-                        );
-                    }) : <p>No hay horarios disponibles</p>}
-                    </div>
-                </div>
-            </div>
-        )  
-        } else {
-            return false;
-        }
-    };
 
 
     // Solo queremos mostrar los primeros 3 (si es que hay) en los destacados
@@ -108,8 +82,7 @@ function Home() {
                     <div className="container">
                         <h3>{actividad.name}</h3>
                         <p>Tipo de Actividad: {actividad.activitytype}</p>
-                        <button onClick={ ()=> setselectedActivity(actividad.id)}>Realizar Inscripcion</button>
-                        {selectedActivity == actividad.id && <Horarios actividad={actividad}/>}
+                        <button onClick={ ()=> navigation("/Actividad",{state:{id:actividad.id}})}>Realizar Inscripcion</button>
                     </div>
                 </div>
 

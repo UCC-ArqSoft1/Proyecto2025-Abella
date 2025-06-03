@@ -1,19 +1,10 @@
-# syntax=docker/dockerfile:1
-FROM golang:1.22 AS builder
+FROM golang:latest
 
 WORKDIR /app
-
-COPY go.mod go.sum ./s
-
-RUN go mod download
-
 COPY . .
 
+RUN go mod tidy
+RUN go build -o backend
 
-RUN go build -o /main
-
-WORKDIR /app
-
-COPY --from=builder /main /main
-
-CMD ["/main"]
+EXPOSE 8523
+CMD ["./backend"]

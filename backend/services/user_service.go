@@ -69,33 +69,3 @@ func (s *UserService) CreateUser(user domain.UserRegister) (domain.UserLoginResp
 	}
 	return userRes, nil
 }
-
-func (s *UserService) GetUserActivities(userid uint) (domain.Inscriptions, error) {
-	UserActivitiesDAO, err := s.Userclient.GetUserActivities(userid)
-	if err != nil {
-		return domain.Inscriptions{}, err
-	}
-	var InscriptionsDTO domain.Inscriptions
-	for _, Inscription := range UserActivitiesDAO {
-		InscriptionsDTO = append(InscriptionsDTO, domain.Inscription{
-			ID:          Inscription.ID,
-			Name:        Inscription.Activity.Name,
-			CoachName:   Inscription.Activity.Coach.Name,
-			Duration:    Inscription.Activity.Duration,
-			Day:         Inscription.Day,
-			Hour_start:  Inscription.Starting_Hour,
-			Hour_finish: Inscription.Finish_hour,
-		})
-	}
-	return InscriptionsDTO, nil
-}
-
-func (s *UserService) Makeinscription(inscriptionData domain.MakeInscription) {
-	var inscriptiondao dao.Inscription
-	inscriptiondao.UserID = inscriptionData.UserId
-	inscriptiondao.ActivityID = inscriptionData.ActivityId
-	inscriptiondao.Day = inscriptionData.Day
-	inscriptiondao.Starting_Hour = inscriptionData.Hour_start
-	inscriptiondao.Finish_hour = inscriptionData.Hour_finish
-
-}

@@ -53,19 +53,3 @@ func (u *UserClient) SearchActivity() dao.Activity {
 	}
 	return activity // returns the user without the token and no error
 }
-
-func (s *UserClient) GetUserActivities(userid uint) (dao.Inscriptions, error) {
-	var UserActivitiesDAO dao.Inscriptions
-	if err := s.DbClient.db.Where("user_id = ?", userid).Preload("Activity").Find(&UserActivitiesDAO); err.Error != nil {
-		return dao.Inscriptions{}, err.Error
-	}
-	return UserActivitiesDAO, nil
-}
-
-func (s *UserClient) MakeInscription(inscription dao.Inscription) error {
-	err := s.DbClient.db.Create(&inscription)
-	if err != nil {
-		return err.Error
-	}
-	return nil
-}

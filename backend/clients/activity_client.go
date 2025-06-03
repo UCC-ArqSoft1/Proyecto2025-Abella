@@ -7,7 +7,7 @@ import (
 
 type Activity interface {
 	GetActivities() (domain.Activities, error)
-	GetActivityById(int)
+	GetActivityById(int) (dao.Activity, error)
 }
 
 type ActivityClient struct {
@@ -31,4 +31,13 @@ func (s *ActivityClient) GetActivityByKeyword(keyword string) (dao.Activities, e
 		return dao.Activities{}, result.Error
 	}
 	return activitiesDao, nil
+}
+
+func (s *ActivityClient) GetActivityById(id int) (dao.Activity, error) {
+	var activityDao dao.Activity
+	result := s.DbClient.db.Preload("Coach").Preload("ActivityType").Preload("ActivityHours").Where("id = ?", id).First(&activityDao)
+	if result.Error != nil {
+		return dao.Activity{}, result.Error
+	}
+	return activityDao, nil
 }

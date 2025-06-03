@@ -3,12 +3,10 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/maxabella/appgym/domain"
 	"github.com/maxabella/appgym/services"
-	"github.com/maxabella/appgym/utils"
 )
 
 type User interface {
@@ -51,29 +49,5 @@ func (s *UserController) CreateUser(c *gin.Context) {
 		c.Status(404)
 	} else {
 		c.JSON(http.StatusOK, UserResponse)
-	}
-}
-
-func (s *UserController) GetUserActivities(c *gin.Context) {
-	authHeader := c.Request.Header.Get("Authorization")
-	valid, err := utils.ValidateToken(authHeader)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-	if !valid {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authorized"})
-		return
-	}
-	useridstr, _ := c.Params.Get("userid")
-
-	userid, err := strconv.Atoi(useridstr)
-	if err != nil {
-		panic(err.Error())
-	}
-	response, err := s.Userservice.GetUserActivities(uint(userid))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	} else {
-		c.JSON(http.StatusOK, response)
 	}
 }

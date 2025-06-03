@@ -11,6 +11,7 @@ import (
 type Activity interface {
 	GetActivities() (domain.Activities, error)
 	GetActivityByKeyword(keyword string) (domain.Activities, error)
+	GetActivityById(int) (domain.Activity, error)
 }
 
 type ActivityService struct {
@@ -76,4 +77,29 @@ func (s *ActivityService) GetActivityByKeyword(keyword string) (domain.Activitie
 		})
 	}
 	return Activities, nil
+}
+
+func (s *ActivityService) GetActivityById(id int) (domain.Activity, error) {
+	activitydao, err := s.ActivityClient.GetActivityById(id)
+	if err != nil {
+		return domain.Activity{}, err
+	}
+	var activityDto domain.Activity
+	activityDto.ID = activitydao.ID
+	activityDto.Name = activitydao.Name
+	activityDto.CoachName = activitydao.Coach.Name
+	activityDto.Description = activitydao.Description
+	activityDto.Duration = activitydao.Duration
+	activityDto.ActivityType = activitydao.ActivityType.Name
+	var activitieshours []domain.ActivityHours
+	for _, hour := range activitydao.ActivityHours {
+		activitieshours = append(activitieshours, domain.ActivityHours{
+			Id:          hour.ID,
+			Day:         hour.Day,
+			Hour_start:  hour.Starting_Hour,
+			Hour_finish: hour.Finish_hour,
+		})
+	}
+	activityDto.ActivityHours = activitieshours
+	return activityDto, nil
 }

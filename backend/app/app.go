@@ -13,7 +13,7 @@ import (
 	"github.com/maxabella/appgym/utils"
 )
 
-// DEBUG
+// DEBUG FUNCTION
 func printRequestBody(c *gin.Context) {
 	bodyBytes, err := io.ReadAll(c.Request.Body)
 	if err != nil {
@@ -52,11 +52,29 @@ func Start() {
 	Activitiesservice.ActivityClient = &Activitesclient
 	ActivitiesController := controller.ActivityController{}
 	ActivitiesController.ActivitySerivice = &Activitiesservice
+	InscriptionClient := clients.InscriptionClient{}
+	InscriptionClient.DbClient = &MySQLClient
+	InscriptionService := services.InscriptionService{}
+	InscriptionService.InscriptionClient = &InscriptionClient
+	InscriptionController := controller.InscriptionController{}
+	InscriptionController.InscriptionService = &InscriptionService
 	// Iniciamos la app
 	app := gin.Default()
 	app.POST("/register" /*Usercontroller.CreateUser*/, Usercontroller.CreateUser)
 	app.POST("login", utils.CORS, Usercontroller.Login)
 	app.GET("/actividades", utils.CORS, ActivitiesController.GetActivities)
-	app.GET("/user/:userid/activities", utils.CORS, Usercontroller.GetUserActivities)
+	app.GET("/user/:userid/activities", utils.CORS, InscriptionController.GetUserActivities)
+	app.GET("/actividades/:id", utils.CORS, ActivitiesController.GetActivityById)
+	app.POST("/users/inscription", utils.CORS, InscriptionController.MakeInscription) // New inscription for userid
+	/*
+		{
+			Id_usuario
+			Id_actividad
+			Dia
+			Starting_hour
+			Finishing_hour
+		}
+	*/
+
 	app.Run("localhost:8523")
 }
