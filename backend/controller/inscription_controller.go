@@ -44,6 +44,16 @@ func (s *InscriptionController) GetUserActivities(c *gin.Context) {
 }
 
 func (s *InscriptionController) MakeInscription(c *gin.Context) {
+	authHeader := c.Request.Header.Get("Authorization")
+	valid, err := utils.ValidateToken(authHeader)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authorized"})
+		return
+	}
+	// End token validation
 	var inscriptionrequest domain.MakeInscription
 	if err := c.ShouldBindJSON(&inscriptionrequest); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest,
@@ -52,7 +62,7 @@ func (s *InscriptionController) MakeInscription(c *gin.Context) {
 				"message": "Invalid inputs. Please check your inputs"})
 		return
 	}
-	err := s.InscriptionService.Makeinscription(inscriptionrequest)
+	err = s.InscriptionService.Makeinscription(inscriptionrequest)
 	if err != nil {
 		c.JSON(http.StatusBadGateway, fmt.Errorf("No se pudo realizar la inscripcion", err.Error()))
 	}

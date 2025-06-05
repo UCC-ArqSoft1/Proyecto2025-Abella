@@ -44,6 +44,7 @@ func (s *UserController) CreateUser(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	UserResponse, err := s.Userservice.CreateUser(UserData)
 	if err != nil {
 		c.Status(404)
