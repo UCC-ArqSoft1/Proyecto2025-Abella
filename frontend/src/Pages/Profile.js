@@ -52,7 +52,7 @@ export default function Profile() {
         <section className='myactivities-section'>
             <h1>Mis Actividades</h1>
             <div className='myactivities-container'>
-            {MyActivities.map((myactividad)=>{
+            {MyActivities?.map((myactividad)=>{
                 return (
                     <div key={myactividad.id}>
                         <div className='myactivity'>

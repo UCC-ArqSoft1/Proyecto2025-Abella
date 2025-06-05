@@ -10,30 +10,20 @@ import Horarios from "../Components/Inscription_hours";
 function Home() {
     const [selectedActivity,setselectedActivity] = useState(null)
     const [Actividades, setActividades] = useState([])
-    const [isJWTvalid,setisJWTvalid] = useState()
     const navigation = useNavigate();
     let firstthree;
     useEffect(()=> {
         try {
-            const token = localStorage.getItem('userToken') 
             const headers = {
-                'Authorization': token,
                'Content-Type': 'text/plain',
             };
             fetch("/actividades",{
                 method: 'GET',
                 headers: headers
             }).then((res)=> {
-                setisJWTvalid(res.headers.get("istokenvalid"))
-                if (isJWTvalid == false) {
-                    console.log("token invalidated")
-                    localStorage.setItem('userToken',null)
-                }
-                console.log(res.headers.get("istokenvalid"))
                 return(res.json());
             }).then((data)=>{
                 setActividades(data);
-                firstthree = Actividades.slice(0,3)
             })
         } catch (error) {
             console.log("404:Could not Fetch")
@@ -50,11 +40,13 @@ function Home() {
 
 
 
-    // Solo queremos mostrar los primeros 3 (si es que hay) en los destacados
+    // Solo queremos mostrar los primeros 3 (si es que hay) en los "destacados"
     var firstThreeItems = []
     if (Actividades.length > 3) {
         firstThreeItems = Actividades.slice(0, 3);
+        setActividades(firstThreeItems)
     }
+
 
 
     return ( 
@@ -75,7 +67,7 @@ function Home() {
             </form>
             <h1 className="search-form featuredh1">Actividades Destacadas</h1>
             <div className="Activities-container">
-            {firstThreeItems.map((actividad)=>{
+            {Actividades.map((actividad)=>{
                 return(
                <div key={actividad.id} className="activity-card">
                     <img src={pool}  width={"100%"}></img>

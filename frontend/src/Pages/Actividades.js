@@ -109,9 +109,8 @@ export default function Actividades() {
                                 <p>Profesor: {actividad.coach_name}</p>
                             </div>
                         </div>
-                        <button onClick={ ()=> setselectedActivity(actividad.id)}>Inscribirse</button>
+                        <button onClick={ ()=> navigation("/Actividad",{state:{id:actividad.id}})}>Inscribirse</button>
                         {userType == 2 ? Editbtn() : userType}
-                        {selectedActivity == actividad.id && <Horarios actividad={actividad}/>}
                     </div>
                     {quantity > 1 ? divider() : null}
                     </div>

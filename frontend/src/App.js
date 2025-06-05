@@ -19,11 +19,15 @@ function App() {
   const [userType,setuserType] = useState(null)
 
   useEffect(()=> { // We update the 
-    if (localStorage.getItem('userToken') != "null" && localStorage.getItem('userToken') != "") { // If token exists
-      const decoded = jwtDecode(localStorage.getItem('userToken'))
+    const token = localStorage.getItem('userToken')
+    if (token) {
+
+      if (token !== null && token !== "") { // If token exists
+      const decoded = jwtDecode(token)
       if (decoded.usertype != null) {
         setuserType(decoded.usertype)
       }
+    }
     }
   })
 

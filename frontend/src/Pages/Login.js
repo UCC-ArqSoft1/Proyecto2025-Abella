@@ -5,7 +5,7 @@ import { jwtDecode } from 'jwt-decode';
 import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
-  const [data, setData] = useState(null); 
+  const [data, setData] = useState(); 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [userType,setuserType] = useContext(UserTypeContext);
@@ -37,14 +37,16 @@ function Login() {
 
       const responseData = await response.json();
       setData(responseData);
-      localStorage.setItem('userToken', data.token);
+      localStorage.setItem('userToken', responseData.token);
       const decoded = jwtDecode(localStorage.getItem('userToken'))
       setuserType(decoded.usertype)
-      navigation("/")
     } catch (e) {
-      setError(e);
+      console.log(e)
+      alert("Usuario o contraseña incorrecto")
     } finally {
+
       setLoading(false);
+      navigation("/")
     }
   };
 

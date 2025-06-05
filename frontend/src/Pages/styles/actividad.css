@@ -1,101 +1,197 @@
 @import url('https://fonts.googleapis.com/css?family=Muli&display=swap');
 
 
-.courses-container {
-	display: block;
-	position: relative;
-	height: 100%;
-		top: 50%;
-}
+		.activity-wrapper {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+		}
 
-.course {
+        .card {
+		
+            width: 100%;
+            max-width: 42rem;
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 3rem;
+            transform: scale(1);
+            transition: all 0.3s ease-out;
+        }
 
-	background-color: #fff;
-	border-radius: 10px;
-	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-	display: flex;
-	max-width: 100%;
-	margin: 20px;
-	overflow: hidden;
-	width: 90%;
-}
 
-.course h6 {
-	opacity: 0.6;
-	margin: 0;
-	letter-spacing: 1px;
-	text-transform: uppercase;
-}
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
 
-.course h2 {
-	letter-spacing: 1px;
-	margin: 10px 0;
-}
+        .icon-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(45deg, #8b5cf6, #ec4899);
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+        }
 
-.course-preview {
-	background-color: #2A265F;
-	color: #fff;
-	padding: 30px;
-	max-width: 250px;
-}
+        .icon {
+            width: 2rem;
+            height: 2rem;
+            stroke: white;
+            stroke-width: 2;
+            fill: none;
+        }
 
-.course-preview a {
-	color: #fff;
-	display: inline-block;
-	font-size: 12px;
-	opacity: 0.6;
-	margin-top: 30px;
-	text-decoration: none;
-}
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
 
-.course-info {
-	padding: 30px;
-	position: relative;
-	width: 100%;
-}
+        .activity-type {
+            display: inline-block;
+            background: linear-gradient(45deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
 
-.progress-container {
-	position: absolute;
-	top: 30px;
-	right: 30px;
-	text-align: right;
-	width: 150px;
-}
+        .description {
+            margin-bottom: 2rem;
+        }
 
-.progress {
-	background-color: #ddd;
-	border-radius: 3px;
-	height: 5px;
-	width: 100%;
-}
+        .description p {
+            font-size: 1.125rem;
+            color: #6b7280;
+            line-height: 1.6;
+            text-align: center;
+            max-width: 36rem;
+            margin: 0 auto;
+        }
 
-.progress::after {
-	border-radius: 3px;
-	background-color: #2A265F;
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 5px;
-	width: 66%;
-}
+        .details {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
 
-.progress-text {
-	font-size: 10px;
-	opacity: 0.6;
-	letter-spacing: 1px;
-}
+        @media (min-width: 768px) {
+            .details {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .title {
+                font-size: 3.5rem;
+            }
+        }
 
-.btn {
-	background-color: #2A265F;
-	border: 0;
-	border-radius: 50px;
-	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2);
-	color: #fff;
-	font-size: 16px;
-	padding: 12px 25px;
-	position: absolute;
-	bottom: 30px;
-	right: 30px;
-	letter-spacing: 1px;
+        .detail-card {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid;
+        }
+
+        .coach-card {
+            background: linear-gradient(45deg, #f0fdf4, #ecfdf5);
+            border-color: #bbf7d0;
+        }
+
+        .duration-card {
+            background: linear-gradient(45deg, #eff6ff, #dbeafe);
+            border-color: #bfdbfe;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 0.75rem;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .coach-icon {
+            stroke: #10b981;
+        }
+
+        .duration-icon {
+            stroke: #3b82f6;
+        }
+
+        .detail-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .detail-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .action-section {
+            text-align: center;
+        }
+
+        .start-button {
+            background: linear-gradient(45deg, #8b5cf6, #ec4899);
+            color: white;
+            font-weight: 700;
+            padding: 1rem 3rem;
+            border-radius: 9999px;
+            font-size: 1.125rem;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: scale(1);
+            transition: all 0.2s ease-out;
+        }
+
+        .start-button:hover {
+            background: linear-gradient(45deg, #7c3aed, #db2777);
+            transform: scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .start-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.3);
+        }
+
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        background: rgba(0, 0, 0, 0.5);
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        z-index: 10;
 }
