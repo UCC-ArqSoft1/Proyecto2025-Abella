@@ -65,6 +65,7 @@ func (s *ActivityController) GetActivityById(c *gin.Context) {
 	Activity, err := s.ActivitySerivice.GetActivityById(idint)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, fmt.Errorf("Could not process request", err.Error()))
+
 	}
 	c.JSON(202, Activity)
 }

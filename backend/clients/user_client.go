@@ -10,9 +10,6 @@ type User interface {
 	GetUserById()
 	CreateUser(dao.User) (uint, error)
 	GetUserByEmail(string) (dao.User, error)
-	SearchActivity() dao.Activity // DELETE JUST FOR DEBUG
-	GetUserActivities(userid uint) (dao.Inscriptions, error)
-	MakeInscription(userid uint, activityid uint) error
 }
 
 type UserClient struct {
@@ -43,13 +40,4 @@ func (u *UserClient) CreateUser(user dao.User) (uint, uint, error) {
 		return 0, 0, result.Error
 	}
 	return user.ID, user.UserTypeID, nil // returns the user without the token and no error
-}
-
-func (u *UserClient) SearchActivity() dao.Activity {
-	var activity dao.Activity
-	result := u.DbClient.db.Preload("Coach").Where("id=1").First(&activity)
-	if result.Error != nil {
-		panic(result.Error.Error())
-	}
-	return activity // returns the user without the token and no error
 }

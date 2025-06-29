@@ -13,6 +13,8 @@ import (
 
 type Inscription interface {
 	GetUserActivities(*gin.Context)
+	MakeInscription(*gin.Context)
+	DeleteUserInscription(*gin.Context)
 }
 
 type InscriptionController struct {
@@ -64,6 +66,31 @@ func (s *InscriptionController) MakeInscription(c *gin.Context) {
 	}
 	err = s.InscriptionService.Makeinscription(inscriptionrequest)
 	if err != nil {
-		c.JSON(http.StatusBadGateway, fmt.Errorf("No se pudo realizar la inscripcion", err.Error()))
+		fmt.Println(err.Error())
+		c.JSON(http.StatusBadGateway, err.Error())
 	}
+}
+
+func (s *InscriptionController) DeleteUserInscription(c *gin.Context) {
+	authHeader := c.Request.Header.Get("Authorization")
+	valid, err := utils.ValidateToken(authHeader)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authorized"})
+		return
+	}
+	Iid, _ := c.Params.Get("id")
+	intID, err := strconv.Atoi(Iid)
+	if err != nil {
+		panic(err.Error())
+		return
+	}
+	err = s.InscriptionService.DeleteUserInscription(uint(intID))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+	c.Status(202)
 }

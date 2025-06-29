@@ -26,19 +26,6 @@ type Activity struct {
 	ActivityHours  []ActivityHour `gorm:"foreignKey:ActivityID"`
 }
 
-type Inscription struct {
-	ID            uint `gorm:"primaryKey;autoIncrement"`
-	UserID        uint
-	ActivityID    uint
-	Day           string
-	Starting_Hour int
-	Finish_hour   int
-	Activity      Activity
-	User          User
-}
-
-type Inscriptions []Inscription
-
 type ActivityTypes []ActivityType
 
 type Activities []Activity

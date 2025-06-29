@@ -10,8 +10,8 @@ import (
 )
 
 type User interface {
-	CreateUser(domain.User)
-	Login(domain.UserLoginRequest)
+	CreateUser(user domain.UserRegister) (domain.UserLoginResponse, error)
+	Login(user domain.UserLoginRequest) (domain.UserLoginResponse, error)
 	GetUserByEmail(string)
 	CreateUserType()
 }
@@ -23,7 +23,7 @@ type UserService struct {
 func (s *UserService) Login(user domain.UserLoginRequest) (domain.UserLoginResponse, error) {
 	UserDAO, err := s.Userclient.GetUserByEmail(user.Email)
 	if err != nil {
-		return domain.UserLoginResponse{}, fmt.Errorf("User not found!", err)
+		return domain.UserLoginResponse{}, fmt.Errorf("User not found! %v", err)
 	}
 	hashed_password := utils.HashSHA256(user.Password)
 	if UserDAO.HashedPassword != hashed_password {

@@ -3,11 +3,12 @@ import { act, useEffect, useState } from 'react';
 
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useLocation,useNavigate } from 'react-router-dom';
 import './styles/actividad.css';
 import { jwtDecode } from 'jwt-decode';
 
 function Actividad() {
+    const navigation = useNavigate()
     const [actividad,setactividad] = useState()
     const location = useLocation();
     const props = location.state;
@@ -44,7 +45,7 @@ function Actividad() {
         return <></>
     }
 
-    function RealizarInscripcion(_userid,_activityid,_day,_hourstart,_hourfinish) {
+    async function RealizarInscripcion(_userid,_activityid,_day,_hourstart,_hourfinish) {
         const data = {
             userid: _userid,
             activityid: _activityid,
@@ -52,16 +53,42 @@ function Actividad() {
             hour_start: _hourstart,
             hour_finish: _hourfinish,
         }
-        console.log("JSON: ",JSON.stringify(data))
-        fetch("/users/inscription",{
-        method:"POST",
-        headers: {
-          'Content-Type': 'text/plain',
-        },
-        body: JSON.stringify(data), // Replace with your data
-      });
-    }
 
+        const token = localStorage.getItem('userToken')
+        if (token == null) {
+            localStorage.removeItem('userToken')
+            alert("Debes iniciar sesion para poder inscribirte en esta actividad")
+            navigation("/Login")
+        }
+
+        console.log("JSON: ",JSON.stringify(data))
+            await fetch('/users/inscription',{
+            method:"POST",
+            headers: {
+                'Authorization':token,
+                'Content-Type': 'text/plain',
+            },
+            body: JSON.stringify(data),
+        }).then((res)=> {
+            if (!res.ok) {
+                if (res.status == 401) {
+                    alert("Tienes que iniciar sesion para inscribirse en esta actividad")
+                    localStorage.removeItem('userToken')
+                    navigation("/Login")
+                }
+                if (res.status == 502) {
+                    alert(res.text())
+                    return
+                }
+            }
+            if (res.ok) {
+                alert("Inscripcion realizada con exito!")
+            }
+        }).catch((error)=>{
+            alert(error)
+            
+        })
+        }
 
 function Horarios() {
 

@@ -40,13 +40,14 @@ function Login() {
       localStorage.setItem('userToken', responseData.token);
       const decoded = jwtDecode(localStorage.getItem('userToken'))
       setuserType(decoded.usertype)
+      navigation("/")
     } catch (e) {
       console.log(e)
       alert("Usuario o contraseña incorrecto")
+      return
     } finally {
-
       setLoading(false);
-      navigation("/")
+
     }
   };
 

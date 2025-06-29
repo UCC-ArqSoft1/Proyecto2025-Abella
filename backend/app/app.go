@@ -66,15 +66,7 @@ func Start() {
 	app.GET("/user/:userid/activities", utils.CORS, InscriptionController.GetUserActivities)
 	app.GET("/actividades/:id", utils.CORS, ActivitiesController.GetActivityById)
 	app.POST("/users/inscription", utils.CORS, InscriptionController.MakeInscription) // New inscription for userid
-	/*
-		{
-			Id_usuario
-			Id_actividad
-			Dia
-			Starting_hour
-			Finishing_hour
-		}
-	*/
+	app.DELETE("users/inscription/:id/delete", utils.CORS, InscriptionController.DeleteUserInscription)
 
-	app.Run("localhost:8523")
+	app.Run(":8523")
 }

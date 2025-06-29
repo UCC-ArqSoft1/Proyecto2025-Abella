@@ -8,6 +8,7 @@ import (
 type Inscription interface {
 	GetUserActivities(userid uint) (domain.Inscriptions, error)
 	Makeinscription(inscriptionData domain.MakeInscription) error
+	DeleteUserInscription(id uint) error
 }
 
 type InscriptionService struct {
@@ -36,6 +37,14 @@ func (s *InscriptionService) GetUserActivities(userid uint) (domain.Inscriptions
 
 func (s *InscriptionService) Makeinscription(inscriptionData domain.MakeInscription) error {
 	err := s.InscriptionClient.MakeInscription(inscriptionData)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *InscriptionService) DeleteUserInscription(id uint) error {
+	err := s.InscriptionClient.DeleteUserInscription(id)
 	if err != nil {
 		return err
 	}

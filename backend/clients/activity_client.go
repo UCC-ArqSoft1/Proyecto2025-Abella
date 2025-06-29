@@ -8,6 +8,7 @@ import (
 type Activity interface {
 	GetActivities() (domain.Activities, error)
 	GetActivityById(int) (dao.Activity, error)
+	GetActivityByKeyword(keyword string) (dao.Activities, error)
 }
 
 type ActivityClient struct {

@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: ./backend
+    depends_on:
+      - database  
+    environment:
+      - DB_HOST=database
+      - DB_USER=root
+      - DB_PASSWORD=12345678
+      - DB_NAME=gymdb
+      - DB_PORT=3306
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+  database:
+    image: mysql:9.3
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: gymdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:  

@@ -1,8 +1,7 @@
-import logo from './logo.svg';
 import './App.css';
 import Home from "./Pages/Home"
 import {BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState, createContext, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Register from './Pages/Register';
 import Login from './Pages/Login';
 import Actividad from './Pages/Actividad';
@@ -18,20 +17,17 @@ function App() {
   
   const [userType,setuserType] = useState(null)
 
-  useEffect(()=> { // We update the 
+  useEffect(()=> {
     const token = localStorage.getItem('userToken')
-    if (token) {
-
-      if (token !== null && token !== "") { // If token exists
-      const decoded = jwtDecode(token)
-      if (decoded.usertype != null) {
-        setuserType(decoded.usertype)
-      }
-    }
-    }
-  })
-
-  
+        console.log(token)
+        if (token == null) {
+            setuserType(null)
+        } else {
+          const decoded = jwtDecode(token)
+          setuserType(decoded.usertype)
+        }
+        return
+  },[])
 
   return (
       <UserTypeContext.Provider value={[userType,setuserType]}> 
@@ -47,7 +43,6 @@ function App() {
       </Routes>
     </BrowserRouter>
     </UserTypeContext.Provider>
-    
   );
 }
 

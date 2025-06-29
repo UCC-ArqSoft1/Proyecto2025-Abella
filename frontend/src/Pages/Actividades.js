@@ -21,13 +21,13 @@ export default function Actividades() {
        'Content-Type': 'text/plain',
     };
 
-
-    useEffect(()=> {
-            try {
+    function updateSearch() {
+                    try {
                 fetch(url,{
                     method: 'GET',
                     headers: headers
                 }).then((res)=> {
+
                     return(res.json());
                 }).then((data)=>{
                     console.log(data)
@@ -37,11 +37,18 @@ export default function Actividades() {
                 console.log("404:Could not Fetch")
                 return
             }
-        
-            
-            // Token management here 
+    }
+
+    function updatesearchparam() {
+        const keyword2 = document.getElementById("search-input").value
+        keyword2 != null ? url = "/actividades"+'?keyword='+keyword2 : url = url
+        console.log(url)
+        updateSearch()
+    }
 
 
+    useEffect(()=> {
+        updateSearch()
         }, []);
  function Horarios(props) {
 
@@ -93,7 +100,7 @@ export default function Actividades() {
                 <div className='search-side-menu'>
                     <p>{quantity} Resultados</p>
                     <input placeholder='Buscar por palabra clave o categoria' id='search-input'></input>
-                    <button>Buscar</button>
+                    <button onClick={()=> {updatesearchparam()}}>Buscar</button>
                     <button>Quitar Filtros</button>
                 </div>
                 <div className='activities-list'>
@@ -110,7 +117,7 @@ export default function Actividades() {
                             </div>
                         </div>
                         <button onClick={ ()=> navigation("/Actividad",{state:{id:actividad.id}})}>Inscribirse</button>
-                        {userType == 2 ? Editbtn() : userType}
+                        {userType == 2 ? Editbtn() : ()=>{return ""}}
                     </div>
                     {quantity > 1 ? divider() : null}
                     </div>
