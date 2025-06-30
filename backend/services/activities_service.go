@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/maxabella/appgym/clients"
+	"github.com/maxabella/appgym/dao"
 	"github.com/maxabella/appgym/domain"
 )
 
@@ -12,6 +13,7 @@ type Activity interface {
 	GetActivities() (domain.Activities, error)
 	GetActivityByKeyword(keyword string) (domain.Activities, error)
 	GetActivityById(int) (domain.Activity, error)
+	CreateActivity(domain.NewActivity) error
 }
 
 type ActivityService struct {
@@ -102,4 +104,19 @@ func (s *ActivityService) GetActivityById(id int) (domain.Activity, error) {
 	}
 	activityDto.ActivityHours = activitieshours
 	return activityDto, nil
+}
+
+func (s *ActivityService) CreateActivity(ActivityInfo domain.NewActivity) error {
+	var ActivityInfoDAO dao.Activity
+	ActivityInfoDAO.Name = ActivityInfo.Name
+	ActivityInfoDAO.Description = ActivityInfo.Description
+	ActivityInfoDAO.ActivityTypeID = ActivityInfo.ActivityTypeID
+	ActivityInfoDAO.Duration = uint(ActivityInfo.Duration)
+	ActivityInfoDAO.Capacity = uint(ActivityInfo.Capacity)
+	ActivityInfoDAO.CoachID = ActivityInfo.CoachId
+	err := s.ActivityClient.CreateActivity(ActivityInfoDAO)
+	if err != nil {
+		return err
+	}
+	return nil
 }

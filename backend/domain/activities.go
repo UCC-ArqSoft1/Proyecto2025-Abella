@@ -17,4 +17,13 @@ type Activity struct {
 	ActivityHours []ActivityHours `json:"activity_hours"`
 }
 
+type NewActivity struct {
+	Name           string `json:"name"`
+	Description    string `json:"description"`
+	Duration       int    `json:"duration"`
+	CoachId        uint   `json:"coachid"`
+	ActivityTypeID uint   `json:"activitytypeid"`
+	Capacity       int    `json:"capacity"`
+}
+
 type Activities []Activity

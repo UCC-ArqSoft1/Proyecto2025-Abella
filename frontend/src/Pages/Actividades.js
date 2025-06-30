@@ -10,11 +10,16 @@ export default function Actividades() {
     const [selectedActivity,setselectedActivity] = useState(null)
     const [Actividades, setActividades] = useState([])
     const [userType,setuserType] = useContext(UserTypeContext);
+    const [profesores,setprofesores] = useState([])
+    const [categorias,setcategorias] = useState([])
     const keyword = searchParams.get('keyword');
     const navigation = useNavigate();
-    var url = "/actividades"
+    const [iscreating,setiscreating] = useState(false)
 
+    // Variables
+    var url = "/actividades"
     keyword != null ? url = url+'?keyword='+keyword : url = url
+    // Final declaracion de variables
 
     const headers = {
         'Authorization': localStorage.getItem('userToken'),
@@ -78,6 +83,70 @@ export default function Actividades() {
         }
     };
 
+    function FormularioCrearActividad() {
+    const headers_Create = {
+        'Authorization': localStorage.getItem('userToken'),
+       'Content-Type': 'text/plain',
+    };
+        try {
+            fetch("/users/profesores",{
+                method:"GET",
+                headers:headers_Create
+            }).then((res)=>{
+                return(res.json());
+            }).then((data)=>{
+                console.log(data)
+                setprofesores(data)
+            })
+        } catch (error) {
+            alert("Error al realizar fetch de profesores")
+        }
+
+        try {
+            fetch("/activities/types",{
+                method:"GET",
+                headers:headers_Create
+            }).then((res)=>{
+                return(res.json());
+            }).then((data)=>{
+                console.log(data)
+                setcategorias(data)
+            })
+        } catch (error) {
+            alert("Error al realizar fetch de Categorias")
+        }
+        return(
+            <div className='CreateActivityForm-container'>
+                <form className='CreateActivityForm'>
+                    <h5>Formulario Crear Actividad</h5>
+                    <input placeholder='Nombre Actividad'></input>
+                    <input placeholder='Descripcion'></input>
+                    <p>Profesores:</p>
+                    <select id="profesores_select">
+                        {profesores?.map((Profesor)=>{
+                            return(
+                                <option value={Profesor.id}>{Profesor.name}</option>
+                            )
+                        })}
+                    </select>
+                    <p>Categoria:</p>
+                    <select id="categorias_select">
+                        {categorias?.map((Categoria)=>{
+                            return(
+                                <option value={Categoria.id}>{Categoria.name}</option>
+                            )
+                        })}
+                    </select>
+                    <input placeholder='Nombre Actividad'></input>
+                    <button>Crear Actividad</button>
+                    <button onClick={()=>{setiscreating(false)}}>Cancelar</button>
+                    </form>
+            </div>
+        )
+    }
+
+
+
     function Editbtn() {
         return (
             <button>Editar</button>
@@ -90,7 +159,10 @@ export default function Actividades() {
         )
     }
 
-    let quantity = Actividades.length
+    let quantity = 0
+      if (Actividades != null) {
+          quantity = Actividades.length
+      }
 
     return ( 
         <div className="activities-page">
@@ -102,9 +174,11 @@ export default function Actividades() {
                     <input placeholder='Buscar por palabra clave o categoria' id='search-input'></input>
                     <button onClick={()=> {updatesearchparam()}}>Buscar</button>
                     <button>Quitar Filtros</button>
+                    {userType == 2 && <button onClick={()=>{setiscreating(true)}}>Añadir actividad</button>}
+                    {iscreating == true && <FormularioCrearActividad/>}
                 </div>
                 <div className='activities-list'>
-                    {Actividades.map((actividad)=>{
+                    {Actividades?.map((actividad)=>{
                     return(
                     <div>
                     <div key={actividad.id} className="activity-item">

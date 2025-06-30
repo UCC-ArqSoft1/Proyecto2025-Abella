@@ -14,6 +14,7 @@ import (
 type Activity interface {
 	GetActivities(*gin.Context) (domain.Activities, error)
 	GetActivityById(*gin.Context)
+	CreateActivity(*gin.Context)
 }
 
 type ActivityController struct {
@@ -68,4 +69,29 @@ func (s *ActivityController) GetActivityById(c *gin.Context) {
 
 	}
 	c.JSON(202, Activity)
+}
+
+func (s *ActivityController) CreateActivity(c *gin.Context) {
+	// Funcion general para validar el token, puede ser movida a una funcion del paquete utils. Hacer si hay mas tiempo
+	authHeader := c.Request.Header.Get("Authorization")
+	valid, err := utils.ValidateToken(authHeader)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authorized"})
+		return
+	}
+
+	var ActivityInfo domain.NewActivity
+	err = c.ShouldBindJSON(&ActivityInfo)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Informacion invalida en la request"})
+		return
+	}
+	err = s.ActivitySerivice.CreateActivity(ActivityInfo)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No se pudo crear la actividad. Intentelo nuevamente"})
+	}
+	c.Status(http.StatusOK)
 }

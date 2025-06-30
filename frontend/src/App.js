@@ -17,13 +17,20 @@ function App() {
   
   const [userType,setuserType] = useState(null)
 
-  useEffect(()=> {
+  useEffect(()=> { // La funcion es un poco redundante pero de esa manera se asegura de que el token no sea invalido y que todos los errores esten manejados.
     const token = localStorage.getItem('userToken')
         console.log(token)
         if (token == null) {
             setuserType(null)
         } else {
-          const decoded = jwtDecode(token)
+          let decoded = null
+          try {
+              decoded = jwtDecode(token)
+          } catch (error) {
+            setuserType(null)
+            localStorage.setItem('userToken',null)
+            return;
+          }
           setuserType(decoded.usertype)
         }
         return

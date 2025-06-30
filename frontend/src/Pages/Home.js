@@ -17,7 +17,7 @@ function Home() {
             const headers = {
                'Content-Type': 'text/plain',
             };
-            fetch("/actividades",{
+            fetch("http://localhost:8523/actividades",{
                 method: 'GET',
                 headers: headers
             }).then((res)=> {
@@ -42,9 +42,11 @@ function Home() {
 
     // Solo queremos mostrar los primeros 3 (si es que hay) en los "destacados"
     var firstThreeItems = []
-    if (Actividades.length > 3) {
-        firstThreeItems = Actividades.slice(0, 3);
-        setActividades(firstThreeItems)
+    if (Actividades != null) {        
+        if (Actividades.length > 3) {
+            firstThreeItems = Actividades.slice(0, 3);
+            setActividades(firstThreeItems)
+        }
     }
 
 
@@ -67,7 +69,7 @@ function Home() {
             </form>
             <h1 className="search-form featuredh1">Actividades Destacadas</h1>
             <div className="Activities-container">
-            {Actividades.map((actividad)=>{
+            {Actividades?.map((actividad)=>{
                 return(
                <div key={actividad.id} className="activity-card">
                     <img src={pool}  width={"100%"}></img>

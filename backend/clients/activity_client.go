@@ -9,6 +9,7 @@ type Activity interface {
 	GetActivities() (domain.Activities, error)
 	GetActivityById(int) (dao.Activity, error)
 	GetActivityByKeyword(keyword string) (dao.Activities, error)
+	CreateActivity(dao.Activity) error
 }
 
 type ActivityClient struct {
@@ -41,4 +42,12 @@ func (s *ActivityClient) GetActivityById(id int) (dao.Activity, error) {
 		return dao.Activity{}, result.Error
 	}
 	return activityDao, nil
+}
+
+func (s *ActivityClient) CreateActivity(ActivityInfoDAO dao.Activity) error {
+	err := s.DbClient.db.Create(&ActivityInfoDAO)
+	if err != nil {
+		panic(err.Error)
+	}
+	return nil
 }
