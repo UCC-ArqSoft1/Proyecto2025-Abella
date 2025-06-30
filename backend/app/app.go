@@ -68,7 +68,7 @@ func Start() {
 	app.POST("/users/inscription", utils.CORS, InscriptionController.MakeInscription) // New inscription for userid
 	app.DELETE("users/inscription/:id/delete", utils.CORS, InscriptionController.DeleteUserInscription)
 	app.POST("actividades/new", utils.CORS, ActivitiesController.CreateActivity)
-	app.GET("/users/profesores", utils.CORS)
+	app.GET("/users/profesores", utils.CORS, Usercontroller.GetCoaches)
 	app.GET("/activities/types", utils.CORS)
 
 	app.Run(":8523")

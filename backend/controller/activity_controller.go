@@ -15,6 +15,7 @@ type Activity interface {
 	GetActivities(*gin.Context) (domain.Activities, error)
 	GetActivityById(*gin.Context)
 	CreateActivity(*gin.Context)
+	GetCategories(*gin.Context)
 }
 
 type ActivityController struct {

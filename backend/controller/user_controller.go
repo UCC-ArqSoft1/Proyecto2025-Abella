@@ -12,6 +12,7 @@ import (
 type User interface {
 	CreateUser(*gin.Context)
 	Login(*gin.Context)
+	GetCoaches(*gin.Context)
 }
 
 type UserController struct {
@@ -51,4 +52,8 @@ func (s *UserController) CreateUser(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, UserResponse)
 	}
+}
+
+func (s *UserController) GetCoaches(c *gin.Context) {
+
 }
