@@ -70,6 +70,7 @@ func Start() {
 	app.POST("/actividades/new", utils.CORS, ActivitiesController.CreateActivity)
 	app.GET("/users/profesores", utils.CORS, Usercontroller.GetCoaches)
 	app.GET("/activities/types", utils.CORS, ActivitiesController.GetCategories)
+	app.POST("/activities/addhour", utils.CORS, ActivitiesController.CreateActivityHour)
 
 	app.Run(":8523")
 }

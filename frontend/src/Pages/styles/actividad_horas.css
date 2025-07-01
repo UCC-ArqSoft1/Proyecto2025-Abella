@@ -1,0 +1,74 @@
+
+.Hours_container {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    display: grid;
+    width: 100%;
+    margin: 0;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+    justify-items: center;
+}
+
+.Hour2 {
+    display: flex;
+    width: 250px;
+    height: 250px;
+    background-color: rgb(255, 255, 255);
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Hour2 p {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.Hour-create {
+    display: flex;
+    width: 250px;
+    height: 250px;
+    background-color: beige;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.plus-button {
+  width: 50px;
+  height: 50px;
+  background-color: #c5c5c5;
+  color: rgb(117, 117, 117);
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.plus-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
+.plus-button:active {
+  transform: scale(1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.horarios-title {
+  align-self: center;
+}
+
+.page_container {
+  text-align: center;
+}

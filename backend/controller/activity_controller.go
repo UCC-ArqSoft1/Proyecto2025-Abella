@@ -16,10 +16,35 @@ type Activity interface {
 	GetActivityById(*gin.Context)
 	CreateActivity(*gin.Context)
 	GetCategories(*gin.Context)
+	CreateActivityHour(*gin.Context)
 }
 
 type ActivityController struct {
 	ActivitySerivice *services.ActivityService
+}
+
+func (s *ActivityController) CreateActivityHour(c *gin.Context) {
+	authHeader := c.Request.Header.Get("Authorization")
+	valid, err := utils.ValidateToken(authHeader)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authorized"})
+		return
+	}
+	var ActivityHourInfo domain.NewHour
+	err = c.ShouldBindJSON(&ActivityHourInfo)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	err = s.ActivitySerivice.CreateActivityHour(ActivityHourInfo)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.Status(http.StatusOK)
 }
 
 func (c *ActivityController) GetActivities(ctx *gin.Context) {

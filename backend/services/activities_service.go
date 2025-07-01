@@ -17,6 +17,7 @@ type Activity interface {
 	GetActivityById(int) (domain.Activity, error)
 	CreateActivity(domain.NewActivity) error
 	GetCategories() (domain.ActivityTypes, error)
+	CreateActivityHour(domain.NewHour) error
 }
 
 type ActivityService struct {
@@ -134,6 +135,19 @@ func (s *ActivityService) CreateActivity(ActivityInfo domain.NewActivity) error 
 	ActivityInfoDAO.Capacity = uint(ActivityInfo.Capacity)
 	ActivityInfoDAO.CoachID = ActivityInfo.CoachId
 	err := s.ActivityClient.CreateActivity(ActivityInfoDAO)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *ActivityService) CreateActivityHour(ActivityInfoDto domain.NewHour) error {
+	var ActivityHourDao dao.ActivityHour
+	ActivityHourDao.ActivityID = ActivityInfoDto.ActivityID
+	ActivityHourDao.Day = ActivityInfoDto.Day
+	ActivityHourDao.Starting_Hour = ActivityInfoDto.Starting_Hour
+	ActivityHourDao.Finish_hour = ActivityInfoDto.Finish_hour
+	err := s.ActivityClient.CreateActivityHour(ActivityHourDao)
 	if err != nil {
 		return err
 	}

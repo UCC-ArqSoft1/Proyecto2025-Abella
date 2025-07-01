@@ -13,6 +13,7 @@ type Activity interface {
 	GetActivityByKeyword(keyword string) (dao.Activities, error)
 	CreateActivity(dao.Activity) error
 	GetCategories() (dao.ActivityTypes, error)
+	CreateActivityHour(dao.ActivityHour) error
 }
 
 type ActivityClient struct {
@@ -63,4 +64,12 @@ func (s *ActivityClient) GetCategories() (dao.ActivityTypes, error) {
 	}
 	fmt.Println(CategoriesDAO)
 	return CategoriesDAO, nil
+}
+
+func (s *ActivityClient) CreateActivityHour(ActivityInfo dao.ActivityHour) error {
+	err := s.DbClient.db.Create(&ActivityInfo)
+	if err.Error != nil {
+		return err.Error
+	}
+	return nil
 }

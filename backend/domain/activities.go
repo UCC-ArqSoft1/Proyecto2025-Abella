@@ -26,6 +26,13 @@ type NewActivity struct {
 	Capacity       int    `json:"capacity"`
 }
 
+type NewHour struct {
+	ActivityID    uint   `json:"id"`
+	Day           string `json:"day"`
+	Starting_Hour int    `json:"starting_hour"`
+	Finish_hour   int    `json:"finish_hour"`
+}
+
 type ActivityType struct {
 	Id   uint   `json:"id"`
 	Name string `json:"name"`
