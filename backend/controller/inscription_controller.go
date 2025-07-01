@@ -67,7 +67,7 @@ func (s *InscriptionController) MakeInscription(c *gin.Context) {
 	err = s.InscriptionService.Makeinscription(inscriptionrequest)
 	if err != nil {
 		fmt.Println(err.Error())
-		c.JSON(http.StatusBadGateway, err.Error())
+		c.JSON(http.StatusBadRequest, err.Error())
 	}
 }
 

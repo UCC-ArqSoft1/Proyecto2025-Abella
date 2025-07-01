@@ -71,6 +71,10 @@ func Start() {
 	app.GET("/users/profesores", utils.CORS, Usercontroller.GetCoaches)
 	app.GET("/activities/types", utils.CORS, ActivitiesController.GetCategories)
 	app.POST("/activities/addhour", utils.CORS, ActivitiesController.CreateActivityHour)
+	app.POST("/activities/category/add", utils.CORS, ActivitiesController.CreateCategory)
+	app.POST("/activities/edit", utils.CORS, ActivitiesController.EditActivity)
+	app.POST("/activities/hours/edit", utils.CORS, ActivitiesController.EditHour)
+	app.POST("/actividades/:id/delete", utils.CORS, ActivitiesController.DeleteActivity)
 
 	app.Run(":8523")
 }

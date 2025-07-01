@@ -33,9 +33,31 @@ type NewHour struct {
 	Finish_hour   int    `json:"finish_hour"`
 }
 
+type UpdateActivity struct {
+	ID             uint   `json:"id"`
+	Name           string `json:"name"`
+	Description    string `json:"description"`
+	Duration       int    `json:"duration"`
+	CoachId        uint   `json:"coachid"`
+	ActivityTypeID uint   `json:"activitytypeid"`
+	Capacity       int    `json:"capacity"`
+}
+
 type ActivityType struct {
 	Id   uint   `json:"id"`
 	Name string `json:"name"`
+}
+
+type NewCategory struct {
+	Name string `json:"name"`
+}
+
+type UpdateActivityHours struct {
+	Id          uint   `json:"id"`
+	ActivityId  uint   `json:"idactividad"`
+	Day         string `json:"day"`
+	Hour_start  int    `json:"starting_hour"`
+	Hour_finish int    `json:"finish_hour"`
 }
 
 type Activities []Activity

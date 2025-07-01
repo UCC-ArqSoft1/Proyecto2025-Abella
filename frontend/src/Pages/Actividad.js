@@ -7,6 +7,7 @@ import { useLocation,useNavigate } from 'react-router-dom';
 import './styles/actividad.css';
 import './styles/actividad_horas.css';
 import { jwtDecode } from 'jwt-decode';
+import FormularioEditarHorario from '../Components/FormularioEditarHorario';
 import FormularioCrearHorario from '../Components/FormularioCrearHorario';
 
 
@@ -19,6 +20,7 @@ function Actividad() {
     const idactividad = props.id
     const [selectedActivity,setselectedActivity] = useState()
     const [iscreating,setiscreating] = useState(false)
+    const [isediting,setisediting] = useState(false)
     var usertoken = localStorage.getItem('userToken')
     var userid = null
     if (usertoken != null) {
@@ -41,57 +43,68 @@ function Actividad() {
         } catch (error) {
             console.log(error)
         }
-        
     },[])
 
     if (actividad == null) { // esperamos hasta que la request termine
         return <></>
     }
 
-    async function RealizarInscripcion(_userid,_activityid,_day,_hourstart,_hourfinish) {
-        const data = {
-            userid: _userid,
-            activityid: _activityid,
-            day: _day,
-            hour_start: _hourstart,
-            hour_finish: _hourfinish,
-        }
+  async function RealizarInscripcion(_userid, _activityid, _day, _hourstart, _hourfinish) {
+    const data = {
+      userid: _userid,
+      activityid: _activityid,
+      day: _day,
+      hour_start: _hourstart,
+      hour_finish: _hourfinish,
+    };
 
-        const token = localStorage.getItem('userToken')
-        if (token == null) {
-            localStorage.removeItem('userToken')
-            alert("Debes iniciar sesion para poder inscribirte en esta actividad")
-            navigation("/Login")
-        }
+    const token = localStorage.getItem('userToken');
+    if (!token) {
+      localStorage.removeItem('userToken');
+      alert('Debes iniciar sesión para poder inscribirte en esta actividad');
+      navigation('/Login');
+      return;
+    }
 
-        console.log("JSON: ",JSON.stringify(data))
-            await fetch('/users/inscription',{
-            method:"POST",
-            headers: {
-                'Authorization':token,
-                'Content-Type': 'text/plain',
-            },
-            body: JSON.stringify(data),
-        }).then((res)=> {
-            if (!res.ok) {
-                if (res.status == 401) {
-                    alert("Tienes que iniciar sesion para inscribirse en esta actividad")
-                    localStorage.removeItem('userToken')
-                    navigation("/Login")
-                }
-                if (res.status == 502) {
-                    alert(res.text())
-                    return
-                }
-            }
-            if (res.ok) {
-                alert("Inscripcion realizada con exito!")
-            }
-        }).catch((error)=>{
-            alert(error)
-            
-        })
+    try {
+      const res = await fetch('/users/inscription', {
+        method: 'POST',
+        headers: {
+          Authorization: token, // Standardize Authorization header
+          'Content-Type': 'application/json', // Correct Content-Type
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          alert('Tienes que iniciar sesión para inscribirse en esta actividad');
+          localStorage.removeItem('userToken');
+          navigation('/Login');
+          return;
         }
+        if (res.status === 400) {
+          const errorText = await res.text();
+          alert(errorText); // Properly resolve the Promise
+          return;
+        }
+        const errorText = await res.text();
+        alert(`Error: ${errorText}`);
+        return;
+      }
+
+      alert('Inscripción realizada con éxito!');
+    } catch (error) {
+      alert(`Error de red: ${error.message}`);
+    }
+  }
+
+    function Editbtn() {
+        return (
+            <button onClick={()=>{setisediting(true)}}>Editar</button>
+        )
+    }
+
 
 function Horarios() {
 
@@ -178,13 +191,14 @@ function Horarios() {
                             <p>{hour.day}</p>
                             <p>{hour.hour_start}{hour.hour_start > 1100 && hour.hour_start <= 2300 ? "PM" : "AM"}</p>
                             <p>{hour.hour_finish}{hour.hour_finish > 1100 && hour.hour_finish <= 2300 ? "PM" : "AM"}</p>
-                            <button onClick={() => { RealizarInscripcion(userid, actividad.id, hour.day, hour.hour_start, hour.hour_finish) }}>Inscribirse</button>
+                            {userType == 2 && Editbtn()}
+                            {isediting == true && <FormularioEditarHorario setiscreating={setisediting} idactividad={actividad.id} idhorario={hour.id}/>}
                         </div>
                     );
                 }) : <p>No hay horarios disponibles</p>}
                 {userType == 2 && <div class="Hour-create">
                     <button class="plus-button" onClick={()=>{setiscreating(true)}}>+</button>
-                    {iscreating == true && <FormularioCrearHorario setiscreating={setiscreating} idactividad={actividad.id}/>}
+                    {iscreating == true && <FormularioCrearHorario setiscreating={setiscreating} idactividad={actividad.id}/>}  
                 </div>}
             </section>
         </div>

@@ -18,6 +18,7 @@ type Activity interface {
 	CreateActivity(domain.NewActivity) error
 	GetCategories() (domain.ActivityTypes, error)
 	CreateActivityHour(domain.NewHour) error
+	EditActivity(domain.Activity) error
 }
 
 type ActivityService struct {
@@ -148,6 +149,73 @@ func (s *ActivityService) CreateActivityHour(ActivityInfoDto domain.NewHour) err
 	ActivityHourDao.Starting_Hour = ActivityInfoDto.Starting_Hour
 	ActivityHourDao.Finish_hour = ActivityInfoDto.Finish_hour
 	err := s.ActivityClient.CreateActivityHour(ActivityHourDao)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *ActivityService) CreateCategory(CategoryDto domain.NewCategory) error {
+	var NewCategory dao.ActivityType
+	NewCategory.Name = CategoryDto.Name
+	err := s.ActivityClient.CreateCategory(NewCategory)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *ActivityService) EditActivity(ActivityInfoDto domain.UpdateActivity) error {
+	var ActivityinfoDao dao.Activity
+	ActivityinfoDao.ID = ActivityInfoDto.ID
+	ActivityinfoDao.Name = ActivityInfoDto.Name
+	ActivityinfoDao.Description = ActivityInfoDto.Description
+	ActivityinfoDao.ActivityTypeID = ActivityInfoDto.ActivityTypeID
+	ActivityinfoDao.CoachID = ActivityInfoDto.CoachId
+	ActivityinfoDao.Duration = uint(ActivityInfoDto.Duration)
+	ActivityinfoDao.Capacity = uint(ActivityInfoDto.Capacity)
+	err := s.ActivityClient.EditActivity(ActivityinfoDao)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *ActivityService) EditHour(ActivityInfo domain.UpdateActivityHours) error {
+
+	var HourEditDao dao.ActivityHour
+	var InscriptionEditDao dao.Inscription
+
+	fmt.Println("DTO: ", ActivityInfo)
+
+	HourEditDao.ID = ActivityInfo.Id
+	HourEditDao.ActivityID = ActivityInfo.ActivityId
+	HourEditDao.Day = ActivityInfo.Day
+	HourEditDao.Starting_Hour = ActivityInfo.Hour_start
+	HourEditDao.Finish_hour = ActivityInfo.Hour_finish
+
+	InscriptionEditDao.ActivityID = ActivityInfo.ActivityId
+	InscriptionEditDao.Day = ActivityInfo.Day
+	InscriptionEditDao.Starting_Hour = ActivityInfo.Hour_start
+	InscriptionEditDao.Finish_hour = ActivityInfo.Hour_finish
+
+	fmt.Println("HourDAO: ", HourEditDao)
+	fmt.Println("InscriptionDao: ", InscriptionEditDao)
+
+	err := s.ActivityClient.EditActivityHour(HourEditDao)
+	if err != nil {
+		return err
+	}
+
+	err = s.ActivityClient.UpdateInscriptions(InscriptionEditDao)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *ActivityService) DeleteActivity(id uint) error {
+	err := s.ActivityClient.DeleteActivity(id)
 	if err != nil {
 		return err
 	}

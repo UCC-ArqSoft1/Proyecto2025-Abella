@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
 import './CreateActivity.css' 
+import FormularioCrearCategoria from './FormularioCrearCategoria';
 
 function FormularioCrearActividad({ setiscreating }) {
     const navigation = useNavigate()
     const [profesores, setprofesores] = useState([]);
     const [categorias, setcategorias] = useState([]);
-
+    const [iscreatingCategory,setiscreatingCategory] = useState(false)
     const headers_Create = {
         'Authorization': localStorage.getItem('userToken'),
         'Content-Type': 'text/plain',
@@ -28,7 +29,7 @@ function FormularioCrearActividad({ setiscreating }) {
             headers: headers_Create,
             body: JSON.stringify(data),
         }).then((res)=>{
-            if (res.status == 202) {
+            if (res.status == 200) {
                 alert("Actividad Creada con exito")
             }
             if (res.status == 401) {
@@ -91,7 +92,7 @@ function FormularioCrearActividad({ setiscreating }) {
 
     return (
         <div className='CreateActivityForm-container'>
-            <form className='CreateActivityForm'>
+            <div className='CreateActivityForm'>
                 <h5>Formulario Crear Actividad</h5>
                 <input id='Activity_name_create' placeholder='Nombre Actividad' />
                 <input id='Activity_description_create' placeholder='Descripción' />
@@ -111,13 +112,15 @@ function FormularioCrearActividad({ setiscreating }) {
                         </option>
                     ))}
                 </select>
+                <button onClick={()=>{setiscreatingCategory(true)}}>+</button>
                 <p>Cupo:</p>
                 <input id='Activity_capacity_create' placeholder='Cupo Actividad' />
                 <p>Duracion:</p>
                 <input id='Activity_duration_create' placeholder='Duracion de la Actividad' />
                 <button onClick={()=>{PostCrearActividad()}}>Crear Actividad</button>
                 <button onClick={() => setiscreating(false)}>Cancelar</button>
-            </form>
+                {iscreatingCategory == true && <FormularioCrearCategoria setiscreatingCategory={setiscreatingCategory} setiscreating={setiscreating}/>}
+            </div>
         </div>
     );
 }

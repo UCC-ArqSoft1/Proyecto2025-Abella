@@ -23,6 +23,7 @@ export default function Navbar(props) {
         return (
             <>
                 <a className="navbar-element" href='/Profile'>Profile</a>
+                <a className="navbar-element" onClick={()=>{localStorage.removeItem("userToken")}} href='/Login'>Log out</a>
             </>
         )
     }

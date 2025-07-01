@@ -14,6 +14,7 @@ type Activity interface {
 	CreateActivity(dao.Activity) error
 	GetCategories() (dao.ActivityTypes, error)
 	CreateActivityHour(dao.ActivityHour) error
+	EditActivity(dao.Activity) error
 }
 
 type ActivityClient struct {
@@ -71,5 +72,70 @@ func (s *ActivityClient) CreateActivityHour(ActivityInfo dao.ActivityHour) error
 	if err.Error != nil {
 		return err.Error
 	}
+	return nil
+}
+
+func (s *ActivityClient) CreateCategory(CategoryInfo dao.ActivityType) error {
+	err := s.DbClient.db.Create(&CategoryInfo)
+	if err.Error != nil {
+		return err.Error
+	}
+	return nil
+}
+
+func (s *ActivityClient) EditActivity(ActivityInfo dao.Activity) error {
+	err := s.DbClient.db.Save(&ActivityInfo)
+	if err.Error != nil {
+		return err.Error
+	}
+	return nil
+}
+
+func (s *ActivityClient) EditActivityHour(HourInfo dao.ActivityHour) error {
+	fmt.Println(HourInfo)
+	err := s.DbClient.db.Model(dao.ActivityHour{}).Where("id = ?", HourInfo.ID).Updates(map[string]interface{}{
+		"day":           HourInfo.Day,
+		"starting_hour": HourInfo.Starting_Hour,
+		"finish_hour":   HourInfo.Finish_hour,
+	})
+	if err.Error != nil {
+		return err.Error
+	}
+	return nil
+}
+
+func (s *ActivityClient) UpdateInscriptions(InscriptionInfo dao.Inscription) error {
+	fmt.Println(InscriptionInfo)
+	err := s.DbClient.db.Model(dao.Inscription{}).Where("activity_id = ?", InscriptionInfo.ActivityID).Updates(map[string]interface{}{
+		"day":           InscriptionInfo.Day,
+		"starting_hour": InscriptionInfo.Starting_Hour,
+		"finish_hour":   InscriptionInfo.Finish_hour,
+	}).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *ActivityClient) DeleteActivity(id uint) error {
+	// DELETE INSCRIPTIONS 1
+
+	err := s.DbClient.db.Where("activity_id = ?", id).Delete(dao.Inscription{})
+	if err.Error != nil {
+		return err.Error
+	}
+	// DELETE HOURS 2
+
+	err = s.DbClient.db.Where("activity_id = ?", id).Delete(dao.ActivityHour{})
+	if err.Error != nil {
+		return err.Error
+	}
+
+	// DELETE Activity 3
+	err = s.DbClient.db.Where("id = ?", id).Delete(dao.Activities{})
+	if err.Error != nil {
+		return err.Error
+	}
+
 	return nil
 }

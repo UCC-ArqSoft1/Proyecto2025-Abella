@@ -5,6 +5,7 @@ import {UserTypeContext} from "../App"
 import './styles/activities-list.css';
 import banner from '../assets/activities-banner.jpg'
 import FormularioCrearActividad from '../Components/FormularioCrearActividad';
+import FormularioEditarActividad from '../Components/FormularioEditarActividad';
 
 export default function Actividades() {
     const [searchParams,setSearchParams] = useSearchParams();
@@ -16,6 +17,7 @@ export default function Actividades() {
     const keyword = searchParams.get('keyword');
     const navigation = useNavigate();
     const [iscreating,setiscreating] = useState(false)
+    const [isediting,setisediting] = useState(false)
 
     // Variables
     var url = "/actividades"
@@ -52,19 +54,38 @@ export default function Actividades() {
         updateSearch()
     }
 
+    function DeleteActivity(actId) {
+        try {
+            fetch("/actividades/"+actId+"/delete",{
+                method:'POST',
+                headers: headers
+            }).then((res)=>{
+            if (res.status == 200) {
+                alert("Actividad borrada con exito")
+            }
+            if (res.status == 401) {
+                console.log("token is not valid")
+                localStorage.removeItem('userToken')
+                alert("Debes iniciar sesion nuevamente")
+                navigation("/Login")
+            }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(()=> {
         updateSearch()
     }, []);
 
-
-
-
-
     function Editbtn() {
         return (
-            <button>Editar</button>
+            <button onClick={()=>{setisediting(true)}}>Editar</button>
         )
     }
+
+
 
     function divider() {
         return (
@@ -104,7 +125,9 @@ export default function Actividades() {
                             </div>
                         </div>
                         <button onClick={ ()=> navigation("/Actividad",{state:{id:actividad.id}})}>Detalles</button>
-                        {userType == 2 ? Editbtn() : ()=>{return ""}}
+                        {userType == 2 ? Editbtn() : ()=>{return""}}
+                        {userType == 2 && <button onClick={()=>{DeleteActivity(actividad.id)}}>Borrar</button>}
+                        {isediting == true && <FormularioEditarActividad setiscreating={setisediting} idactividad={actividad.id} name={actividad.name} description={actividad.description} duration={actividad.duration} capacity={actividad.capacity}/>}
                     </div>
                     {quantity > 1 ? divider() : null}
                     </div>

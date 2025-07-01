@@ -28,7 +28,7 @@ func (s *UserController) Login(c *gin.Context) {
 	}
 	UserLogged, err := s.Userservice.Login(requestedUser)
 	if err != nil {
-		c.JSON(http.StatusForbidden, gin.H{"error": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 	c.JSON(http.StatusOK, UserLogged)
