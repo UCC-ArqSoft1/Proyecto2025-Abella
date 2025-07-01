@@ -14,6 +14,7 @@ type User interface {
 	Login(user domain.UserLoginRequest) (domain.UserLoginResponse, error)
 	GetUserByEmail(string)
 	CreateUserType()
+	GetCoaches() (domain.Coaches, error)
 }
 
 type UserService struct {
@@ -68,4 +69,19 @@ func (s *UserService) CreateUser(user domain.UserRegister) (domain.UserLoginResp
 		fmt.Println("User with that email already exists")
 	}
 	return userRes, nil
+}
+
+func (s *UserService) GetCoaches() (domain.Coaches, error) {
+	var Coaches domain.Coaches
+	CoachesInfoDto, err := s.Userclient.GetCoaches()
+	if err != nil {
+		return domain.Coaches{}, err
+	}
+	for _, Coach := range CoachesInfoDto {
+		Coaches = append(Coaches, domain.Coach{
+			ID:   Coach.ID,
+			Name: Coach.Name + " " + Coach.LastName,
+		})
+	}
+	return Coaches, nil
 }

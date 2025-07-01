@@ -79,7 +79,6 @@ function Home() {
                         <button onClick={ ()=> navigation("/Actividad",{state:{id:actividad.id}})}>Realizar Inscripcion</button>
                     </div>
                 </div>
-
             )})}
             </div>
         </div>

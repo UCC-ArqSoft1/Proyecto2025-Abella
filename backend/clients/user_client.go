@@ -10,6 +10,7 @@ type User interface {
 	GetUserById()
 	CreateUser(dao.User) (uint, error)
 	GetUserByEmail(string) (dao.User, error)
+	GetCoaches() (dao.User, error)
 }
 
 type UserClient struct {
@@ -40,4 +41,13 @@ func (u *UserClient) CreateUser(user dao.User) (uint, uint, error) {
 		return 0, 0, result.Error
 	}
 	return user.ID, user.UserTypeID, nil // returns the user without the token and no error
+}
+
+func (u *UserClient) GetCoaches() (dao.Users, error) {
+	var CoachesInfoDTO dao.Users
+	err := u.DbClient.db.Find(&CoachesInfoDTO)
+	if err.Error != nil {
+		return dao.Users{}, err.Error
+	}
+	return CoachesInfoDTO, nil
 }

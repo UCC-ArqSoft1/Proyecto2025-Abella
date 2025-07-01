@@ -96,3 +96,21 @@ func (s *ActivityController) CreateActivity(c *gin.Context) {
 	}
 	c.Status(http.StatusOK)
 }
+
+func (s *ActivityController) GetCategories(c *gin.Context) {
+	authHeader := c.Request.Header.Get("Authorization")
+	valid, err := utils.ValidateToken(authHeader)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	if !valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "User not authorized"})
+		return
+	}
+	Categories, err := s.ActivitySerivice.GetCategories()
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+	}
+	fmt.Println(Categories)
+	c.JSON(http.StatusOK, Categories)
+}

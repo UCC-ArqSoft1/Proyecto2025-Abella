@@ -26,4 +26,11 @@ type NewActivity struct {
 	Capacity       int    `json:"capacity"`
 }
 
+type ActivityType struct {
+	Id   uint   `json:"id"`
+	Name string `json:"name"`
+}
+
 type Activities []Activity
+
+type ActivityTypes []ActivityType

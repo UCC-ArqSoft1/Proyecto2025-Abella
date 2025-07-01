@@ -1,6 +1,8 @@
 package clients
 
 import (
+	"fmt"
+
 	"github.com/maxabella/appgym/dao"
 	"github.com/maxabella/appgym/domain"
 )
@@ -10,6 +12,7 @@ type Activity interface {
 	GetActivityById(int) (dao.Activity, error)
 	GetActivityByKeyword(keyword string) (dao.Activities, error)
 	CreateActivity(dao.Activity) error
+	GetCategories() (dao.ActivityTypes, error)
 }
 
 type ActivityClient struct {
@@ -46,8 +49,18 @@ func (s *ActivityClient) GetActivityById(id int) (dao.Activity, error) {
 
 func (s *ActivityClient) CreateActivity(ActivityInfoDAO dao.Activity) error {
 	err := s.DbClient.db.Create(&ActivityInfoDAO)
-	if err != nil {
+	if err.Error != nil {
 		panic(err.Error)
 	}
 	return nil
+}
+
+func (s *ActivityClient) GetCategories() (dao.ActivityTypes, error) {
+	var CategoriesDAO dao.ActivityTypes
+	err := s.DbClient.db.Find(&CategoriesDAO)
+	if err.Error != nil {
+		return dao.ActivityTypes{}, err.Error
+	}
+	fmt.Println(CategoriesDAO)
+	return CategoriesDAO, nil
 }

@@ -4,6 +4,7 @@ import { useContext,useEffect,useState } from "react";
 import {UserTypeContext} from "../App"
 import './styles/activities-list.css';
 import banner from '../assets/activities-banner.jpg'
+import FormularioCrearActividad from '../Components/FormularioCrearActividad';
 
 export default function Actividades() {
     const [searchParams,setSearchParams] = useSearchParams();
@@ -51,99 +52,11 @@ export default function Actividades() {
         updateSearch()
     }
 
-
     useEffect(()=> {
         updateSearch()
-        }, []);
- function Horarios(props) {
+    }, []);
 
-        var close = false;
-        if (close == false) {
-        return (
-            <div onClick={() => {setselectedActivity(null)}} className="Inscripcion-horarios">
-            <div className="inscription-container">
-            <h4>Horarios</h4>
-            <div className="Horarios">
-                {props.actividad.activity_hours != null ? props.actividad.activity_hours.map((hour) => {
-                return (
-                    <div key={hour.id} className="hour">
-                        <p>{hour.day}</p>
-                        <p>{hour.hour_start}{hour.hour_start > 1100 && hour.hour_start <= 2300 ? "PM" : "AM"}</p>
-                        <p>{hour.hour_finish}{hour.hour_finish > 1100 && hour.hour_finish <= 2300 ? "PM" : "AM"}</p>
-                        <button>Inscribirse</button>
-                    </div>
-                );
-            }) : <p>No hay horarios disponibles</p>}
-            </div>
-            </div>
-        </div>
-        )  
-        } else {
-            return false;
-        }
-    };
 
-    function FormularioCrearActividad() {
-    const headers_Create = {
-        'Authorization': localStorage.getItem('userToken'),
-       'Content-Type': 'text/plain',
-    };
-        try {
-            fetch("/users/profesores",{
-                method:"GET",
-                headers:headers_Create
-            }).then((res)=>{
-                return(res.json());
-            }).then((data)=>{
-                console.log(data)
-                setprofesores(data)
-            })
-        } catch (error) {
-            alert("Error al realizar fetch de profesores")
-        }
-
-        try {
-            fetch("/activities/types",{
-                method:"GET",
-                headers:headers_Create
-            }).then((res)=>{
-                return(res.json());
-            }).then((data)=>{
-                console.log(data)
-                setcategorias(data)
-            })
-        } catch (error) {
-            alert("Error al realizar fetch de Categorias")
-        }
-        return(
-            <div className='CreateActivityForm-container'>
-                <form className='CreateActivityForm'>
-                    <h5>Formulario Crear Actividad</h5>
-                    <input placeholder='Nombre Actividad'></input>
-                    <input placeholder='Descripcion'></input>
-                    <p>Profesores:</p>
-                    <select id="profesores_select">
-                        {profesores?.map((Profesor)=>{
-                            return(
-                                <option value={Profesor.id}>{Profesor.name}</option>
-                            )
-                        })}
-                    </select>
-                    <p>Categoria:</p>
-                    <select id="categorias_select">
-                        {categorias?.map((Categoria)=>{
-                            return(
-                                <option value={Categoria.id}>{Categoria.name}</option>
-                            )
-                        })}
-                    </select>
-                    <input placeholder='Nombre Actividad'></input>
-                    <button>Crear Actividad</button>
-                    <button onClick={()=>{setiscreating(false)}}>Cancelar</button>
-                    </form>
-            </div>
-        )
-    }
 
 
 
@@ -175,7 +88,7 @@ export default function Actividades() {
                     <button onClick={()=> {updatesearchparam()}}>Buscar</button>
                     <button>Quitar Filtros</button>
                     {userType == 2 && <button onClick={()=>{setiscreating(true)}}>Añadir actividad</button>}
-                    {iscreating == true && <FormularioCrearActividad/>}
+                    {iscreating == true && <FormularioCrearActividad setiscreating={setiscreating}/>}
                 </div>
                 <div className='activities-list'>
                     {Actividades?.map((actividad)=>{
@@ -190,7 +103,7 @@ export default function Actividades() {
                                 <p>Profesor: {actividad.coach_name}</p>
                             </div>
                         </div>
-                        <button onClick={ ()=> navigation("/Actividad",{state:{id:actividad.id}})}>Inscribirse</button>
+                        <button onClick={ ()=> navigation("/Actividad",{state:{id:actividad.id}})}>Detalles</button>
                         {userType == 2 ? Editbtn() : ()=>{return ""}}
                     </div>
                     {quantity > 1 ? divider() : null}
@@ -201,4 +114,5 @@ export default function Actividades() {
         </div>
     )
 }
+
 

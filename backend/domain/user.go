@@ -27,3 +27,10 @@ type UserLoginResponse struct {
 	UserID uint   `json:"userid"`
 	Token  string `json:"token"`
 }
+
+type Coach struct {
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
+}
+
+type Coaches []Coach

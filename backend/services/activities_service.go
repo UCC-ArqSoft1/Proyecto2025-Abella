@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/maxabella/appgym/clients"
 	"github.com/maxabella/appgym/dao"
 	"github.com/maxabella/appgym/domain"
@@ -14,10 +16,27 @@ type Activity interface {
 	GetActivityByKeyword(keyword string) (domain.Activities, error)
 	GetActivityById(int) (domain.Activity, error)
 	CreateActivity(domain.NewActivity) error
+	GetCategories() (domain.ActivityTypes, error)
 }
 
 type ActivityService struct {
 	ActivityClient *clients.ActivityClient
+}
+
+func (s *ActivityService) GetCategories() (domain.ActivityTypes, error) {
+	var CategoriesDTO domain.ActivityTypes
+	CategoriesDAO, err := s.ActivityClient.GetCategories()
+	if err != nil {
+		return domain.ActivityTypes{}, err
+	}
+	fmt.Println(CategoriesDTO)
+	for _, Category := range CategoriesDAO {
+		CategoriesDTO = append(CategoriesDTO, domain.ActivityType{
+			Id:   Category.ID,
+			Name: Category.Name,
+		})
+	}
+	return CategoriesDTO, nil
 }
 
 func (s *ActivityService) GetActivities() (domain.Activities, error) {

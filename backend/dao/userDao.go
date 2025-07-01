@@ -20,3 +20,5 @@ type User struct {
 	IsCoach         bool
 	CoachActivities []Activity `gorm:"foreignKey:CoachID"`
 }
+
+type Users []User
